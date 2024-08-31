@@ -53,7 +53,7 @@ public class MyArrayList<T> {
     /**
      * Возвращает размер массива.
      *
-     * @return - размер массива
+     * @return размер массива
      */
     public int size() {
         return size;
@@ -63,26 +63,40 @@ public class MyArrayList<T> {
      * Добавляет новый элемент в массив.
      * При достижении максимального значения внутреннего массива удваивает его.
      *
-     * @param item
+     * @param element добавляемый элемент
      */
-    public void add(T item) {
+    public void add(T element) {
         if (size >= capacity) {
             resizeArray();
         }
-        array[size++] = item;
+        array[size++] = element;
     }
 
     /**
      * Возвращает элемент массива по индексу.
      *
-     * @param index индекс массива
-     * @return элемент массива
+     * @param index индекс возвращаемого элемента
+     * @return возвращаемый элемент
      */
     public T get(int index) {
-        if (index >= 0 && index < size) {
+        if (checkIndex(index)) {
             return (T) array[index];
         }
         return null;
+    }
+
+    /**
+     * Заменяет элемент по индексу.
+     *
+     * @param index индекс элемента для замены
+     * @param element элемент для замены
+     */
+    public void set(int index, T element) {
+        if (checkIndex(index)) {
+            array[index] = element;
+        } else {
+            throw new IllegalArgumentException("Некорректный индекс массива: " + index);
+        }
     }
 
     /**
@@ -93,6 +107,21 @@ public class MyArrayList<T> {
         Object[] newArray = new Object[capacity];
         System.arraycopy(array, 0, newArray, 0, size);
         array = newArray;
+    }
+
+    /**
+     * Проверяет значение индекса в диапазоне от 0 до size.
+     *
+     * @param index индекс проверяемого элемента
+     * @return
+     */
+    private boolean checkIndex(int index) {
+        boolean result = false;
+        if (index >= 0 && index < size) {
+            result = true;
+        }
+
+        return result;
     }
 
 }
