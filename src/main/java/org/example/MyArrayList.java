@@ -20,12 +20,12 @@ public class MyArrayList<T> {
     /**
      * Емкость внутреннего массива.
      */
-    private final int capacity;
+    private int capacity;
 
     /**
      * Массив с данными.
      */
-    private final Object[] array;
+    private Object[] array;
 
     /**
      * Конструктор без аргументов.
@@ -37,6 +37,8 @@ public class MyArrayList<T> {
     }
 
     /**
+     * Конструктор с заданной емкостью массива.
+     *
      * @param capacity емкость создаваемого массива
      */
     public MyArrayList(int capacity) {
@@ -44,10 +46,15 @@ public class MyArrayList<T> {
             this.capacity = capacity;
             this.array = new Object[capacity];
         } else {
-            throw new IllegalArgumentException("Некорректное значение массива:" + capacity);
+            throw new IllegalArgumentException("Некорректное значение массива: " + capacity);
         }
     }
 
+    /**
+     * Возвращает размер массива.
+     *
+     * @return - размер массива
+     */
     public int size() {
         return size;
     }
@@ -59,11 +66,20 @@ public class MyArrayList<T> {
      * @param item
      */
     public void add(T item) {
+        if (size >= capacity) {
+            resizeArray();
+        }
         array[size++] = item;
     }
 
-    private void resize() {
-
+    /**
+     * Увеличивает размер внутреннего массива в два раза.
+     */
+    private void resizeArray() {
+        capacity *= 2;
+        Object[] newArray = new Object[capacity];
+        System.arraycopy(array, 0, newArray, 0, size);
+        array = newArray;
     }
 
 }
