@@ -73,6 +73,19 @@ public class MyArrayList<T> {
     }
 
     /**
+     * Возвращает элемент массива по индексу.
+     *
+     * @param index индекс массива
+     * @return элемент массива
+     */
+    public T get(int index) {
+        if (index >= 0 && index < size) {
+            return (T) array[index];
+        }
+        return null;
+    }
+
+    /**
      * Увеличивает размер внутреннего массива в два раза.
      */
     private void resizeArray() {
