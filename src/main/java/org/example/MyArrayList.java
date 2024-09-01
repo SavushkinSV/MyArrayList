@@ -137,7 +137,19 @@ public class MyArrayList<T> {
     }
 
     /**
-     * Увеличивает размер внутреннего массива в два раза.
+     * Очищает весь массив.
+     */
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            array[i] = null;
+        }
+        size = 0;
+    }
+
+    /**
+     * Увеличивает размер внутреннего массива.
+     *
+     * @param newSize новый размер массива
      */
     private void resizeArray(int newSize) {
         Object[] newArray = new Object[newSize];
