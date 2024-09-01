@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.*;
+
 /**
  * Собственная реализация ArrayList.
  *
@@ -146,6 +148,11 @@ public class MyArrayList<T> {
         size = 0;
     }
 
+    public void sort(Comparator<? super T> comparator) {
+
+
+    }
+
     /**
      * Увеличивает размер внутреннего массива.
      *
@@ -164,12 +171,67 @@ public class MyArrayList<T> {
      * @return
      */
     private boolean checkIndex(int index) {
-        boolean result = false;
-        if (index >= 0 && index < size) {
-            result = true;
+
+        return index >= 0 && index < size;
+    }
+
+    public Iterator<T> iterator() {
+        return new MyArrayList.Itr();
+    }
+
+    private class Itr implements Iterator<T> {
+        int cursor;       // index of next element to return
+        int lastRet = -1; // index of last element returned; -1 if no such
+
+        Itr() {
         }
 
-        return result;
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T next() {
+            int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException();
+            Object[] elementData = MyArrayList.this.array;
+            if (i >= elementData.length)
+                throw new ConcurrentModificationException();
+            cursor = i + 1;
+            return (T) elementData[lastRet = i];
+        }
+
+        public void remove() {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+
+            try {
+                MyArrayList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
+
+    @Override
+    public String toString() {
+        Iterator<T> it = iterator();
+        if (!it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (; ; ) {
+            T t = it.next();
+            sb.append(t == this ? "(this Collection)" : t);
+            if (!it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
+
 
 }
