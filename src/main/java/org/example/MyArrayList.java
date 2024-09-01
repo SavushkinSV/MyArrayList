@@ -69,9 +69,28 @@ public class MyArrayList<T> {
         if (size >= capacity) {
             capacity *= 2;
             resizeArray(capacity);
-            System.out.println("resize()");
         }
         array[size++] = element;
+    }
+
+    /**
+     * Добавляет новый элемент по индексу в массив.
+     *
+     * @param index   индекс добавляемого элемента
+     * @param element добавляемый элемент
+     */
+    public void add(int index, T element) {
+        if (checkIndex(index)) {
+            if (size + 1 >= capacity) {
+                capacity *= 2;
+                resizeArray(capacity);
+            }
+            for (int i = size - 1; i >= index; i--) {
+                array[i + 1] = array[i];
+            }
+            array[index] = element;
+            size++;
+        }
     }
 
     /**
@@ -84,6 +103,7 @@ public class MyArrayList<T> {
         if (checkIndex(index)) {
             return (T) array[index];
         }
+
         return null;
     }
 
@@ -113,7 +133,7 @@ public class MyArrayList<T> {
             }
             array[size - 1] = null;
         }
-
+        size--;
     }
 
     /**
