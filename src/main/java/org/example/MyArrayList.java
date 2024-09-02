@@ -153,6 +153,10 @@ public class MyArrayList<T> {
 
     }
 
+    public void sort() {
+        quickSort(array, 0, size - 1);
+    }
+
     /**
      * Увеличивает размер внутреннего массива.
      *
@@ -199,6 +203,7 @@ public class MyArrayList<T> {
             if (i >= elementData.length)
                 throw new ConcurrentModificationException();
             cursor = i + 1;
+
             return (T) elementData[lastRet = i];
         }
 
@@ -221,7 +226,6 @@ public class MyArrayList<T> {
         Iterator<T> it = iterator();
         if (!it.hasNext())
             return "[]";
-
         StringBuilder sb = new StringBuilder();
         sb.append('[');
         for (; ; ) {
@@ -231,6 +235,51 @@ public class MyArrayList<T> {
                 return sb.append(']').toString();
             sb.append(',').append(' ');
         }
+    }
+
+    /**
+     * Быстрая сортировка
+     *
+     * @param arr массив данных
+     * @param low нижняя граница массива
+     * @param high верхняя граница массива
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void quickSort(Object[] arr, int low, int high) {
+        //завершить, если массив пуст или уже нечего делить
+        if (arr.length == 0 || low >= high) return;
+
+        //выбираем опорный элемент
+        int middle = low + (high - low) / 2;
+        Object border = arr[middle];
+
+        //разделяем на подмассивы и меняем местами
+        int i = low, j = high;
+        while (i <= j) {
+            while (((Comparable) arr[i]).compareTo(border) < 0) i++;
+            while (((Comparable) arr[j]).compareTo(border) > 0) j--;
+            if (i <= j) {
+                swap(arr, i, j);
+                i++;
+                j--;
+            }
+        }
+
+        //рекурсия для сортировки левой и правой части
+        if (low < j) quickSort(arr, low, j);
+        if (high > i) quickSort(arr, i, high);
+    }
+
+    /**
+     * Меняет местами объекты массива.
+     * @param arr массив
+     * @param a индекс элемента для замены
+     * @param b индекс элемента для замены
+     */
+    private static void swap(Object[] arr, int a, int b) {
+        Object tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
     }
 
 
