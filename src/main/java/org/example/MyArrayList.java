@@ -100,13 +100,13 @@ public class MyArrayList<T> {
      *
      * @param index индекс возвращаемого элемента
      * @return возвращаемый элемент
+     * @throws IndexOutOfBoundsException если индекс выходит за пределы диапазона (index < 0 || index >= size()
      */
+    @SuppressWarnings("unchecked")
     public T get(int index) {
-        if (checkIndex(index)) {
-            return (T) array[index];
-        }
+        checkIndex(index);
 
-        return null;
+        return (T) array[index];
     }
 
     /**
@@ -148,13 +148,22 @@ public class MyArrayList<T> {
         size = 0;
     }
 
-    public void sort(Comparator<? super T> comparator) {
-
-
-    }
-
+    /**
+     * Сортирует массив.
+     *
+     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью указанного компаратора
+     */
     public void sort() {
         quickSort(array, 0, size - 1);
+    }
+
+    public void sort(Comparator<? super T> comparator) {
+        if (comparator == null) {
+            quickSort(array, 0, size - 1);
+        } else {
+            quickSort(array, 0, size - 1, comparator);
+        }
+
     }
 
     /**
@@ -169,14 +178,15 @@ public class MyArrayList<T> {
     }
 
     /**
-     * Проверяет значение индекса в диапазоне от 0 до size.
+     * Проверяет значение индекса в диапазоне [0, size).
      *
-     * @param index индекс проверяемого элемента
-     * @return
+     * @throws IndexOutOfBoundsException если индекс выходит за пределы диапазона (index < 0 || index >= size()
      */
     private boolean checkIndex(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Некорректный индекс элемента массива: " + index);
 
-        return index >= 0 && index < size;
+        return true;
     }
 
     public Iterator<T> iterator() {
@@ -238,11 +248,12 @@ public class MyArrayList<T> {
     }
 
     /**
-     * Быстрая сортировка
+     * Сортирует массив методом быстрой сортировки.
      *
-     * @param arr массив данных
-     * @param low нижняя граница массива
+     * @param arr  массив данных
+     * @param low  нижняя граница массива
      * @param high верхняя граница массива
+     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью указанного компаратора
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void quickSort(Object[] arr, int low, int high) {
@@ -271,16 +282,49 @@ public class MyArrayList<T> {
     }
 
     /**
+     * Сортирует массив методом быстрой сортировки с заданным компаратором.
+     *
+     * @param arr  массив данных
+     * @param low  нижняя граница массива
+     * @param high верхняя граница массива
+     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью указанного компаратора
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void quickSort(Object[] arr, int low, int high, Comparator c) {
+        //завершить, если массив пуст или уже нечего делить
+        if (arr.length == 0 || low >= high) return;
+
+        //выбираем опорный элемент
+        int middle = low + (high - low) / 2;
+        Object border = arr[middle];
+
+        //разделяем на подмассивы и меняем местами
+        int i = low, j = high;
+        while (i <= j) {
+            while (c.compare(arr[i], border) < 0) i++;
+            while (c.compare(arr[j], border) > 0) j--;
+            if (i <= j) {
+                swap(arr, i, j);
+                i++;
+                j--;
+            }
+        }
+
+        //рекурсия для сортировки левой и правой части
+        if (low < j) quickSort(arr, low, j, c);
+        if (high > i) quickSort(arr, i, high, c);
+    }
+
+    /**
      * Меняет местами объекты массива.
-     * @param arr массив
-     * @param a индекс элемента для замены
-     * @param b индекс элемента для замены
+     *
+     * @param arr массив данных
+     * @param a   индекс первого элемента для замены
+     * @param b   индекс второго элемента для замены
      */
     private static void swap(Object[] arr, int a, int b) {
         Object tmp = arr[a];
         arr[a] = arr[b];
         arr[b] = tmp;
     }
-
-
 }
