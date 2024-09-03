@@ -5,14 +5,15 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 
 public class MyArrayListTest {
 
-    public static MyArrayList<String> stringList;
+    public static List<String> stringList;
 
     @BeforeAll
     public static void init() {
-        stringList = new MyArrayList<>(Arrays.asList("Moscow", "Kazan", "Yaroslavl", "Novosibirsk", "Murmansk"));
+        stringList = Arrays.asList("Moscow", "Kazan", "Yaroslavl", "Novosibirsk", "Murmansk");
     }
 
     @Test
@@ -53,8 +54,9 @@ public class MyArrayListTest {
 
     @Test
     public void testAddMyArrayListShouldHaveSizeFive() {
+        MyArrayList<String> list = new MyArrayList<String>(stringList);
 
-        Assertions.assertEquals(5, stringList.size());
+        Assertions.assertEquals(5, list.size());
     }
 
     @Test
@@ -128,6 +130,24 @@ public class MyArrayListTest {
         });
 
         Assertions.assertEquals("Некорректный индекс элемента массива: 5", exception.getMessage());
+    }
+
+    @Test
+    public void testRemoveObjectShouldHaveSizeFour() {
+        MyArrayList<Object> list = new MyArrayList<>(stringList);
+        list.remove(0);
+
+        Assertions.assertEquals(4, list.size());
+    }
+
+    @Test
+    public void testExpectedExceptionRemoveIndexOutOfBoundsArray() {
+        MyArrayList<Object> list = new MyArrayList<>(stringList);
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            list.remove(-1);
+        });
+
+        Assertions.assertEquals("Некорректный индекс элемента массива: -1", exception.getMessage());
     }
 
 
