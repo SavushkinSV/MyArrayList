@@ -150,5 +150,11 @@ public class MyArrayListTest {
         Assertions.assertEquals("Некорректный индекс элемента массива: -1", exception.getMessage());
     }
 
+    @Test
+    public void testClearObjectShouldHaveSizeZero() {
+        MyArrayList<Object> list = new MyArrayList<>(stringList);
+        list.clear();
 
+        Assertions.assertEquals(0, list.size());
+    }
 }

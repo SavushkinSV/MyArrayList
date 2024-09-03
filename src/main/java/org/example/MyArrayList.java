@@ -131,8 +131,6 @@ public class MyArrayList<T> {
     public void set(int index, T element) {
         if (checkIndex(index)) {
             array[index] = element;
-        } else {
-            throw new IllegalArgumentException("Некорректный индекс массива: " + index);
         }
     }
 
@@ -147,8 +145,8 @@ public class MyArrayList<T> {
                 array[i] = array[i + 1];
             }
             array[size - 1] = null;
+            size--;
         }
-        size--;
     }
 
     /**
