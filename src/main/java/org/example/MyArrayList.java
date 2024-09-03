@@ -53,6 +53,19 @@ public class MyArrayList<T> {
     }
 
     /**
+     * Создает массив из элементов указанной коллекции.
+     *
+     * @param c коллекция, элементы которой помещаются в массив
+     */
+    public MyArrayList(Collection<? extends T> c) {
+        if (c != null) {
+            Object[] array = c.toArray();
+            size = array.length;
+            this.array = array;
+        }
+    }
+
+    /**
      * Возвращает размер массива.
      *
      * @return размер массива
