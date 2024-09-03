@@ -99,7 +99,9 @@ public class MyArrayList<T> {
      * @param element добавляемый элемент
      */
     public void add(int index, T element) {
-        if (index > 0 && index <= size) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Некорректный индекс элемента массива: " + index);
+        } else {
             if (size + 1 >= capacity) {
                 capacity *= 2;
                 resizeArray(capacity);
@@ -109,8 +111,7 @@ public class MyArrayList<T> {
             }
             array[index] = element;
             size++;
-        } else {
-            throw new IndexOutOfBoundsException("Некорректный индекс элемента массива: " + index);
+
         }
     }
 

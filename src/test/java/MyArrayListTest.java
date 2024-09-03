@@ -248,5 +248,13 @@ public class MyArrayListTest {
         Assertions.assertEquals(0, list.size());
     }
 
+    @Test
+    public void testAddManyObjectsWithIndexZero() {
+        MyArrayList<Object> list = new MyArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            list.add(0, new Object());
+        }
 
+        Assertions.assertEquals(10000, list.size());
+    }
 }
