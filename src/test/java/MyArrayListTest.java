@@ -111,5 +111,24 @@ public class MyArrayListTest {
         }
     }
 
+    @Test
+    public void testSetShouldReturnNewObject() {
+        String expected = "Minsk";
+        MyArrayList<String> list = new MyArrayList<>(Arrays.asList("Moscow", "Kazan", "Yaroslavl", "Novosibirsk", "Murmansk"));
+        list.set(3, expected);
+
+        Assertions.assertEquals(expected, list.get(3));
+    }
+
+    @Test
+    public void testExpectedExceptionSetIndexOutOfBoundsArray() {
+        MyArrayList<String> list = new MyArrayList<>();
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            list.set(5, "Sochi");
+        });
+
+        Assertions.assertEquals("Некорректный индекс элемента массива: 5", exception.getMessage());
+    }
+
 
 }
