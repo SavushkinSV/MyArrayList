@@ -1,11 +1,15 @@
 package org.example;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Собственная реализация ArrayList.
  *
+ * @param <T> тип элементов в массиве
  * @author SavushkinSV
+ * @version 1.0
  */
 public class MyArrayList<T> {
 
@@ -30,8 +34,7 @@ public class MyArrayList<T> {
     private Object[] array;
 
     /**
-     * Конструктор без аргументов.
-     * Создает массив с количеством элементов по умолчанию.
+     * Конструктор создает массив с начальной емкостью 10 элементов.
      */
     public MyArrayList() {
         this.capacity = INIT_CAPACITY;
@@ -39,9 +42,10 @@ public class MyArrayList<T> {
     }
 
     /**
-     * Конструктор с заданной емкостью массива.
+     * Конструктор создает массив с заданной емкостью.
      *
      * @param capacity емкость создаваемого массива
+     * @throws IllegalArgumentException если передано отрицательное значение
      */
     public MyArrayList(int capacity) {
         if (capacity >= 0) {
@@ -53,7 +57,7 @@ public class MyArrayList<T> {
     }
 
     /**
-     * Создает массив из элементов указанной коллекции.
+     * Конструктор создает массив из элементов указанной коллекции.
      *
      * @param c коллекция, элементы которой помещаются в массив
      */
@@ -113,7 +117,7 @@ public class MyArrayList<T> {
      *
      * @param index индекс возвращаемого элемента
      * @return возвращаемый элемент
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы диапазона (index < 0 || index >= size()
+     * @throws IndexOutOfBoundsException если индекс выходит за пределы диапазона
      */
     @SuppressWarnings("unchecked")
     public T get(int index) {
@@ -163,12 +167,18 @@ public class MyArrayList<T> {
     /**
      * Сортирует массив.
      *
-     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью указанного компаратора
+     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью встроенного компаратора
      */
     public void sort() {
         quickSort(array, 0, size - 1);
     }
 
+    /**
+     * Сортирует массив по заданному компаратору.
+     *
+     * @param comparator передаваемый компаратор
+     * @throws ClassCastException если массив содержит элементы, которые не сопоставимы друг с другом с помощью заданного компаратора
+     */
     public void sort(Comparator<? super T> comparator) {
         if (comparator == null) {
             quickSort(array, 0, size - 1);
@@ -201,7 +211,7 @@ public class MyArrayList<T> {
         return true;
     }
 
-    public Iterator<T> iterator() {
+    private Iterator<T> iterator() {
         return new MyArrayList.Itr();
     }
 
@@ -226,6 +236,11 @@ public class MyArrayList<T> {
         }
     }
 
+    /**
+     * Возвращает строковое представление объекта.
+     *
+     * @return строковое представление объекта
+     */
     @Override
     public String toString() {
         Iterator<T> it = iterator();
