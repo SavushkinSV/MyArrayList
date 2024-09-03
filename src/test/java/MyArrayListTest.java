@@ -157,4 +157,22 @@ public class MyArrayListTest {
 
         Assertions.assertEquals(0, list.size());
     }
+
+    @Test
+    public void testToString() {
+        MyArrayList<Object> list = new MyArrayList<>(stringList);
+        String expected = "[Moscow, Kazan, Yaroslavl, Novosibirsk, Murmansk]";
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testToStringWithEmptyArray() {
+        MyArrayList<Object> list = new MyArrayList<>();
+        String expected = "[]";
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+
 }
