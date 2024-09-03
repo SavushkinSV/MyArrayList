@@ -119,6 +119,27 @@ public class MyArrayListTest {
     }
 
     @Test
+    public void testRemoveManyObjectShouldReduceCapacity() {
+        MyArrayList<Integer> list = new MyArrayList<>();
+        int size = 500;
+        for (int i = 0; i < size; i++) {
+            list.add(i);
+        }
+        for (int i = size - 1; i > 5; i--) {
+            list.remove(i);
+        }
+        try {
+            Field field = list.getClass().getDeclaredField("capacity");
+            field.setAccessible(true);
+            int capacity = (int) field.get(list);
+
+            Assertions.assertEquals(20, capacity);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
     public void testSetShouldReturnNewObject() {
         String expected = "Minsk";
         MyArrayList<String> list = new MyArrayList<>(Arrays.asList("Moscow", "Kazan", "Yaroslavl", "Novosibirsk", "Murmansk"));

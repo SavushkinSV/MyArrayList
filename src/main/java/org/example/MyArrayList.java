@@ -151,7 +151,10 @@ public class MyArrayList<T> {
             array[size - 1] = null;
             size--;
         }
-
+        if (array.length > INIT_CAPACITY && size < array.length / 4) {
+            capacity /= 2;
+            resizeArray(capacity);
+        }
     }
 
     /**
