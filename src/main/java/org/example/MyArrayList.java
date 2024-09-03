@@ -219,11 +219,7 @@ public class MyArrayList<T> {
         @SuppressWarnings("unchecked")
         public T next() {
             int i = cursor;
-            if (i >= size)
-                throw new NoSuchElementException();
             Object[] elementData = MyArrayList.this.array;
-            if (i >= elementData.length)
-                throw new ConcurrentModificationException();
             cursor = i + 1;
 
             return (T) elementData[lastRet = i];
