@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class MyArrayListTest {
@@ -25,9 +26,7 @@ public class MyArrayListTest {
 
     @Test
     public void testExpectedExceptionWithNegativeArrayValue() {
-        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new MyArrayList<>(-10);
-        });
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> new MyArrayList<>(-10));
 
         Assertions.assertEquals("Некорректное значение массива: -10", exception.getMessage());
     }
@@ -53,8 +52,16 @@ public class MyArrayListTest {
     }
 
     @Test
+    public void testExpectedExceptionAddWithNegativeArrayValue() {
+        MyArrayList<Object> list = new MyArrayList<>(50);
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.add(-5, new Object()));
+
+        Assertions.assertEquals("Некорректный индекс элемента массива: -5", exception.getMessage());
+    }
+
+    @Test
     public void testAddMyArrayListShouldHaveSizeFive() {
-        MyArrayList<String> list = new MyArrayList<String>(stringList);
+        MyArrayList<String> list = new MyArrayList<>(stringList);
 
         Assertions.assertEquals(5, list.size());
     }
@@ -75,9 +82,7 @@ public class MyArrayListTest {
         MyArrayList<String> list = new MyArrayList<>();
         list.add("Hello");
         list.add("World");
-        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            list.get(2);
-        });
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.get(2));
 
         Assertions.assertEquals("Некорректный индекс элемента массива: 2", exception.getMessage());
     }
@@ -86,7 +91,7 @@ public class MyArrayListTest {
     public void testNewMyArrayListShouldHaveCapacityTen() {
         MyArrayList<Integer> list = new MyArrayList<>();
         try {
-            Field field = field = list.getClass().getDeclaredField("capacity");
+            Field field = list.getClass().getDeclaredField("capacity");
             field.setAccessible(true);
             int capacity = (int) field.get(list);
 
@@ -103,7 +108,7 @@ public class MyArrayListTest {
             list.add(i);
         }
         try {
-            Field field = field = list.getClass().getDeclaredField("capacity");
+            Field field = list.getClass().getDeclaredField("capacity");
             field.setAccessible(true);
             int capacity = (int) field.get(list);
 
@@ -125,9 +130,7 @@ public class MyArrayListTest {
     @Test
     public void testExpectedExceptionSetIndexOutOfBoundsArray() {
         MyArrayList<String> list = new MyArrayList<>();
-        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            list.set(5, "Sochi");
-        });
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.set(5, "Sochi"));
 
         Assertions.assertEquals("Некорректный индекс элемента массива: 5", exception.getMessage());
     }
@@ -143,9 +146,7 @@ public class MyArrayListTest {
     @Test
     public void testExpectedExceptionRemoveIndexOutOfBoundsArray() {
         MyArrayList<Object> list = new MyArrayList<>(stringList);
-        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            list.remove(-1);
-        });
+        Exception exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.remove(-1));
 
         Assertions.assertEquals("Некорректный индекс элемента массива: -1", exception.getMessage());
     }
@@ -172,6 +173,58 @@ public class MyArrayListTest {
         String expected = "[]";
 
         Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testSort() {
+        MyArrayList<Object> list = new MyArrayList<>(stringList);
+        String expected = "[Kazan, Moscow, Murmansk, Novosibirsk, Yaroslavl]";
+        list.sort();
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testSortWishComparator() {
+        MyArrayList<String> list = new MyArrayList<>(stringList);
+        String expected = "[Yaroslavl, Novosibirsk, Murmansk, Moscow, Kazan]";
+        list.sort(Comparator.reverseOrder());
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testSortWishComparatorNull() {
+        MyArrayList<String> list = new MyArrayList<>(stringList);
+        String expected = "[Kazan, Moscow, Murmansk, Novosibirsk, Yaroslavl]";
+        list.sort(null);
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testSortEmptyArray() {
+        MyArrayList<String> list = new MyArrayList<>(0);
+        String expected = "[]";
+        list.sort();
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testSortEmptyArrayWithComparator() {
+        MyArrayList<String> list = new MyArrayList<>(0);
+        String expected = "[]";
+        list.sort(Comparator.naturalOrder());
+
+        Assertions.assertEquals(expected, list.toString());
+    }
+
+    @Test
+    public void testNewMyArrayListConstructorIsNull() {
+        MyArrayList<String> list = new MyArrayList<>(null);
+
+        Assertions.assertEquals(0, list.size());
     }
 
 

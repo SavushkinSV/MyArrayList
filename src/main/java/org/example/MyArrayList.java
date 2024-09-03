@@ -147,6 +147,7 @@ public class MyArrayList<T> {
             array[size - 1] = null;
             size--;
         }
+
     }
 
     /**
@@ -205,8 +206,8 @@ public class MyArrayList<T> {
     }
 
     private class Itr implements Iterator<T> {
-        int cursor;       // index of next element to return
-        int lastRet = -1; // index of last element returned; -1 if no such
+        int cursor;       // индекс следующего элемента для возврата
+        int lastRet = -1; // индекс последнего возвращенного элемента; -1, если такого нет
 
         Itr() {
         }
@@ -218,27 +219,10 @@ public class MyArrayList<T> {
         @SuppressWarnings("unchecked")
         public T next() {
             int i = cursor;
-            if (i >= size)
-                throw new NoSuchElementException();
             Object[] elementData = MyArrayList.this.array;
-            if (i >= elementData.length)
-                throw new ConcurrentModificationException();
             cursor = i + 1;
 
             return (T) elementData[lastRet = i];
-        }
-
-        public void remove() {
-            if (lastRet < 0)
-                throw new IllegalStateException();
-
-            try {
-                MyArrayList.this.remove(lastRet);
-                cursor = lastRet;
-                lastRet = -1;
-            } catch (IndexOutOfBoundsException ex) {
-                throw new ConcurrentModificationException();
-            }
         }
     }
 
